@@ -53,7 +53,9 @@
   "overrides": {
     "tar": "^7.5.11",
     "yauzl": "^3.2.1",
-    "@tootallnate/once": "^3.0.1"
+    "@tootallnate/once": "^3.0.1",
+    "rimraf": "^5.0.0",
+    "glob": "^13.0.0"
   },
   "config": {
     "forge": {
