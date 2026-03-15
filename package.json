@@ -51,7 +51,9 @@
     "electron": "^40.4.1"
   },
   "overrides": {
-    "tar": "^7.5.7"
+    "tar": "^7.5.11",
+    "yauzl": "^3.2.1",
+    "@tootallnate/once": "^3.0.1"
   },
   "config": {
     "forge": {
