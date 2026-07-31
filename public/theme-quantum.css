@@ -1,0 +1,570 @@
+/*
+ * QuantumSwap "Quantum Violet" theme, ported from the browser extension's
+ * theme.css (which in turn ports quantumswap-web-app/src/index.css):
+ * near-black background with ambient violet/cyan orbs, glassy gradient cards
+ * with violet glow, beveled violet CTAs, dark inputs with violet focus rings.
+ *
+ * Loaded (injected by src/renderer.ts) after styles.css when package.json
+ * "name" is "quantumswapwallet", so equal-specificity rules here win.
+ * Purely presentational: no IDs/classes the JS relies on are changed.
+ *
+ * Differences from the extension copy:
+ * - Font stacks drop "Space Grotesk"/"Inter"/"sf-pro" (not bundled here);
+ *   both faces fall back to the bundled Poppins.
+ * - The header/brand LAYOUT rules moved into styles.css (shared with the
+ *   legacy theme); only the header colors/effects remain here.
+ * - No .custom-release-banner rule (the desktop header has no banner).
+ */
+
+:root {
+    --bg: #050508;
+    --text: #e0e0e6;
+    --muted: rgba(255, 255, 255, 0.5);
+    --glass: rgba(255, 255, 255, 0.04);
+    --border: rgba(255, 255, 255, 0.08);
+    --panel: #0b0b12;
+    --accent: #6c3bff;
+    --accent-2: #00e5ff;
+    --accent-soft: #9b73ff;
+    --accent-literal: #c084fc;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --red-soft: #ffb3ba;
+    --headline: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    --body-font: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --input-bg: rgba(8, 8, 14, 0.85);
+    --input-border: rgba(255, 255, 255, 0.13);
+    --card-gradient: linear-gradient(180deg, rgb(31 29 53) 0%, rgb(16 18 31) 45%, rgb(11 14 24) 100%);
+    --card-glow: 0 0 40px -10px rgba(108, 59, 255, 0.45),
+        0 0 90px -30px rgba(108, 59, 255, 0.35),
+        0 30px 80px -40px rgba(0, 0, 0, 0.9);
+    --pop-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.9), 0 0 30px -10px rgba(108, 59, 255, 0.5);
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body-font);
+}
+
+/* styles.css pins these utility classes to Poppins; keep every text run on the
+   web app's body face instead (falls back to the bundled fonts). */
+.tab-name,
+.tab-label,
+.medium,
+.small,
+.large,
+.bold,
+.button-name {
+    font-family: var(--body-font);
+}
+
+a {
+    color: var(--accent-soft);
+}
+
+    a:hover,
+    a:focus {
+        color: var(--accent-literal);
+    }
+
+/* ---------- Ambient orbs (decorative divs added in the pages) ---------- */
+.qs-orb {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.qs-orb-1 {
+    width: 340px;
+    height: 340px;
+    top: -60px;
+    left: -160px;
+    background: radial-gradient(circle at 40% 50%, #6d15ff 0%, rgba(92, 15, 243, 0.68) 42%, transparent 70%);
+    filter: blur(48px);
+    opacity: 0.55;
+}
+
+.qs-orb-2 {
+    width: 380px;
+    height: 380px;
+    bottom: -140px;
+    right: -150px;
+    background: radial-gradient(circle at 60% 45%, #19e6ff 0%, rgba(0, 229, 255, 0.55) 40%, transparent 70%);
+    filter: blur(55px);
+    opacity: 0.4;
+}
+
+/* ---------- Header: black banner -> web-app top bar ----------
+   Layout (flex brand row pinned to the top of the band) lives in styles.css
+   and applies to both themes; this block only recolors the band. */
+.gradient {
+    position: relative;
+    z-index: 10;
+    height: auto;
+    min-height: 64px;
+    /* No backdrop-filter here: blurring behind the bar composites unreliably
+       with the fixed burger/network controls layered on top of it. */
+    background: rgba(2, 2, 5, 0.92);
+    border-bottom: 1px solid var(--border);
+    box-shadow: none;
+    top: 15px;
+}
+
+.gradient .logoimg {
+    border-radius: 10px;
+    box-shadow: 0 0 18px -4px rgba(108, 59, 255, 0.8);
+}
+
+/* Wordmark: static brand gradient (white -> violet -> cyan) in the headline face. */
+.animate-character {
+    font-family: var(--headline) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.2px;
+    background-image: linear-gradient(100deg, #ffffff 0%, #ffffff 45%, #c084fc 70%, #00e5ff 100%);
+    background-size: 100% auto;
+    animation: none;
+}
+
+/* ---------- Cards ---------- */
+.roundex-box,
+.roundex-box-small,
+.roundex-box-middle {
+    background: var(--card-gradient);
+    border: 1px solid rgb(143, 138, 170);
+    border-radius: 22px;
+    padding: 18px;
+    backdrop-filter: none;
+    box-shadow: var(--card-glow);
+}
+
+.heading {
+    color: var(--text);
+}
+
+.heading.bold,
+.heading.large {
+    font-family: var(--headline);
+    color: #ffffff;
+}
+
+.heading.bold {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.heading.medium {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.heading.medium span[style*="font-weight:700"] {
+    color: #ffffff;
+}
+
+.small {
+    color: var(--muted);
+}
+
+.divider {
+    background-color: #ffffff;
+    opacity: 0.08;
+}
+
+.gas-fee-label {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.text-wallet-address {
+    font-family: var(--mono);
+}
+
+/* ---------- Inline light-theme colors (static HTML + JS-set styles) ----------
+   The generated views carry hundreds of inline styles; recolor them here
+   instead of editing every line. !important is required to beat inline
+   declarations. */
+[style*="color: #000000"],
+[style*="color:#000000"],
+[style*="color: black"],
+[style*="color:black"],
+[style*="color: #372339"],
+[style*="color:#372339"],
+input.qs-input,
+input.qs-input-strong,
+textarea.qs-input {
+    color: var(--text) !important;
+}
+
+[style*="color: green"],
+[style*="color:green"],
+[style*="color: #35980e"],
+[style*="color:#35980e"] {
+    color: var(--green) !important;
+}
+
+[style*="color: blue"],
+[style*="color:blue"] {
+    color: var(--accent-literal) !important;
+}
+
+[style*="color: #0066cc"],
+[style*="color:#0066cc"],
+[style*="color: rgb(0, 102, 204)"] {
+    color: #67e8f9 !important;
+}
+
+[style*="color: red"],
+[style*="color:red"],
+[style*="color: #c00"],
+[style*="color:#c00"] {
+    color: var(--red-soft) !important;
+}
+
+[style*="border: 1px solid #ccc"],
+[style*="border:1px solid #ccc"],
+[style*="border:1px solid;"],
+[style*="border: 1px solid;"] {
+    border-color: var(--input-border) !important;
+}
+
+/* Swap screen: allowance label/value and the two token contract addresses in
+   plain white (the generic recolor above maps their inline colors to the
+   softer --text). !important + id specificity beats both the inline styles
+   and the [style*=] hooks; the "Remove allowance" link keeps its own cyan. */
+#divSwapFromAllowanceRow,
+#spanSwapFromAllowance,
+#aSwapFromContract,
+#aSwapToContract {
+    color: #ffffff !important;
+}
+
+[style*="solid green"] {
+    border-bottom-color: var(--green) !important;
+}
+
+/* ---------- Inputs ---------- */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input:not([type]),
+textarea {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 9px;
+    color: var(--text);
+    font-family: var(--body-font);
+    padding: 7px 10px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input:not([type]):focus,
+textarea:focus {
+    border-color: rgba(155, 115, 255, 0.85);
+    box-shadow: 0 0 0 1px rgba(155, 115, 255, 0.35);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #0b0b12 inset;
+    -webkit-text-fill-color: var(--text);
+}
+
+/* The default white spin buttons clash with the dark inputs. */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    accent-color: var(--accent);
+}
+
+.safety_quiz_option {
+    accent-color: var(--accent);
+}
+
+/* ---------- Selects ---------- */
+select {
+    background-color: var(--input-bg);
+    color: var(--text);
+    border: 1px solid var(--input-border);
+    border-radius: 9px;
+    padding: 7px 10px;
+    font-family: var(--body-font);
+}
+
+select option {
+    background-color: var(--panel);
+    color: var(--text);
+}
+
+.select {
+    color: var(--text);
+}
+
+.select::after {
+    background-color: rgb(28 31 47);
+}
+
+.selectwrapper {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 9px;
+}
+
+.selectbox {
+    color: var(--text);
+    background-color: transparent;
+    border: none;
+}
+
+.selectbox:focus {
+    border-color: rgba(155, 115, 255, 0.85);
+    border-style: solid;
+}
+
+/* ---------- Buttons ---------- */
+/* Primary actions: teal glass in the home-tile design language. Tinted glass
+   fill + teal border + soft glow at rest; layered halo lighting on hover;
+   pressed-in sink on mouse-down. --btn holds the hue as raw RGB channels. */
+.close,
+.proceed,
+.oknetwork,
+.iagree,
+.large_button_container {
+    --btn: 20, 184, 166;
+    background: rgba(var(--btn), 0.16);
+    border: 1px solid rgba(var(--btn), 0.65);
+    border-radius: 9px;
+    font-family: var(--headline);
+    font-weight: 600;
+    color: #ffffff;
+    box-shadow: 0 0 14px -6px rgba(var(--btn), 0.55);
+    transition: transform 0.1s ease, box-shadow 0.18s ease,
+        background 0.18s ease, filter 0.1s ease;
+}
+
+/* Plain (mouse) focus keeps the rest appearance; without this, the legacy
+   styles.css :focus rules (green text + lift) would show through after a
+   click leaves the div focused. */
+.close:focus,
+.proceed:focus,
+.oknetwork:focus,
+.iagree:focus,
+.large_button_container:focus {
+    color: #ffffff;
+    transform: none;
+}
+
+/* :focus-visible (not :focus) so a mouse click doesn't leave the halo stuck
+   on these focusable divs after the pointer moves away. */
+.close:hover,
+.close:focus-visible,
+.proceed:hover,
+.proceed:focus-visible,
+.oknetwork:hover,
+.oknetwork:focus-visible,
+.iagree:hover,
+.iagree:focus-visible,
+.large_button_container:hover,
+.large_button_container:focus-visible {
+    color: #ffffff;
+    background: rgba(var(--btn), 0.26);
+    box-shadow: 0 0 22px -4px rgba(var(--btn), 0.85),
+        0 0 48px -10px rgba(var(--btn), 0.6);
+    transform: none;
+}
+
+.close:active,
+.proceed:active,
+.oknetwork:active,
+.iagree:active,
+.large_button_container:active {
+    color: #ffffff;
+    transform: scale(0.97);
+    background: rgba(var(--btn), 0.42);
+    box-shadow: 0 0 10px -2px rgba(var(--btn), 0.9),
+        inset 0 2px 6px rgba(0, 0, 0, 0.55);
+    filter: brightness(1.15);
+}
+
+/* Cancel / Reject: red-tinted glass (web-app disconnect button). */
+.cancel {
+    background: rgba(255, 90, 100, 0.12);
+    border: 1px solid rgba(255, 90, 100, 0.45);
+    border-radius: 9px;
+    color: #ff9aa2;
+    font-family: var(--body-font);
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.cancel:hover,
+.cancel:focus {
+    background: rgba(255, 90, 100, 0.24);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.cancel:active {
+    background: rgba(255, 90, 100, 0.24);
+    color: #ffffff;
+    transform: translateY(0) scale(0.98);
+    box-shadow: none;
+}
+
+/* ---------- Icon buttons (dark-stroke SVGs -> white on dark) ---------- */
+.copy-container,
+.scan-container,
+.refresh-container,
+.back-container,
+.prev-container,
+.next-container,
+img[src*="eye-outline"],
+img[src*="eye-off-outline"] {
+    filter: brightness(0) invert(1);
+    opacity: 0.75;
+    transition: opacity 0.15s ease, transform 0.08s ease;
+}
+
+.copy-container:hover,
+.copy-container:focus,
+.copy-container:active,
+.scan-container:hover,
+.scan-container:focus,
+.scan-container:active,
+.refresh-container:hover,
+.refresh-container:focus,
+.refresh-container:active,
+.back-container:hover,
+.back-container:focus,
+.back-container:active,
+.prev-container:hover,
+.prev-container:focus,
+.prev-container:active,
+.next-container:hover,
+.next-container:focus,
+.next-container:active,
+img[src*="eye-outline"]:hover,
+img[src*="eye-outline"]:focus,
+img[src*="eye-off-outline"]:hover,
+img[src*="eye-off-outline"]:focus {
+    filter: brightness(0) invert(1) drop-shadow(0 0 4px rgba(192, 132, 252, 0.9));
+    opacity: 1;
+}
+
+/* ---------- Modal dialogs ---------- */
+.modal {
+    background-color: rgba(3, 3, 7, 0.6);
+    backdrop-filter: blur(5px);
+    border: none;
+}
+
+/* Same border + violet glow as the cards (.roundex-box) so dialogs stand out
+   against the dark backdrop. */
+.modal-content {
+    background: var(--card-gradient);
+    color: var(--text);
+    border: 1px solid rgb(143, 138, 170);
+    border-radius: 16px;
+    box-shadow: var(--card-glow), var(--pop-shadow);
+}
+
+.modal-content h3 {
+    font-family: var(--headline);
+    font-weight: 700;
+    color: #ffffff;
+}
+
+#divLoadingModalIcon img,
+#imgSendCompletedStatus {
+    border-radius: 10px;
+}
+
+/* ---------- Tables (token list, transactions) ---------- */
+table tr th,
+table tr td {
+    border-right: 1px solid rgba(255, 255, 255, 0.09);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+table tr th:first-child,
+table tr td:first-child {
+    border-left: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+table tr th {
+    background: rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    color: #ffffff;
+}
+
+.styled-table {
+    color: var(--text);
+}
+
+.styled-table a {
+    color: var(--accent-soft);
+}
+
+.styled-table a:hover {
+    color: var(--accent-literal);
+}
+
+/* ---------- Scrollbars ---------- */
+/* The corner where both scrollbars meet defaults to white. */
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(155, 115, 255, 0.5);
+}
+
+/* Cards that scroll themselves have a 22px corner radius; inset the track so
+   the scrollbar doesn't poke past the rounded corners. */
+.roundex-box.scrollbar::-webkit-scrollbar,
+.roundex-box-small.scrollbar::-webkit-scrollbar,
+.roundex-box-middle.scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.roundex-box.scrollbar::-webkit-scrollbar-track,
+.roundex-box-small.scrollbar::-webkit-scrollbar-track,
+.roundex-box-middle.scrollbar::-webkit-scrollbar-track {
+    background-color: transparent;
+    border: none;
+}
+
+.roundex-box.scrollbar::-webkit-scrollbar-track:vertical,
+.roundex-box-small.scrollbar::-webkit-scrollbar-track:vertical,
+.roundex-box-middle.scrollbar::-webkit-scrollbar-track:vertical {
+    margin: 22px 0;
+}
+
+.roundex-box.scrollbar::-webkit-scrollbar-track:horizontal,
+.roundex-box-small.scrollbar::-webkit-scrollbar-track:horizontal,
+.roundex-box-middle.scrollbar::-webkit-scrollbar-track:horizontal {
+    margin: 0 22px;
+}

@@ -1,0 +1,294 @@
+/*
+ * Wallet chrome styling on top of theme-quantum.css, ported from the browser
+ * extension's index.css. Recolors the wallet-specific chrome (burger menu,
+ * network chip, token tables, toggles, autocomplete, seed screens) in the
+ * web-app design language.
+ *
+ * Differences from the extension copy: no .burger-separator rule (the desktop
+ * burger has no surface controls, so no divider) and no .tabbutton recolor
+ * (the bottom tab bar was removed in both themes).
+ */
+
+/* Screens sit above the fixed ambient orbs AND above the header band
+   (z-index 10), since the wallet cards deliberately overlap its bottom edge. */
+.tabs-content,
+.tabs-wallet-content {
+    z-index: 11;
+}
+
+/* Fixed header controls share the brand row's 8px top offset. */
+.burger-menu {
+    top: 8px;
+    left: 12px;
+}
+
+.burger-button {
+    background: var(--glass);
+    border: 1px solid var(--input-border);
+}
+
+.burger-button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.burger-button:hover span,
+.burger-button:focus span,
+.burger-button:active span {
+    background: var(--accent-literal);
+}
+
+.burger-dropdown {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--pop-shadow);
+}
+
+.burger-item {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.burger-item:hover,
+.burger-item:focus,
+.burger-item:active {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+}
+
+.burger-item .tab-icon {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+
+/* Network chip (top-right), like the web app's network pill. */
+.dropdown {
+    top: 8px;
+    right: 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+
+.dropdown:hover,
+.dropdown:focus,
+.dropdown:active {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.networkbox {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.networkbox:hover,
+.networkbox:focus {
+    color: var(--accent-literal);
+}
+
+/* ---------- Home screen ---------- */
+/* Action tile labels (Send / Receive / Transactions / Swap). */
+.buttonBox {
+    color: var(--text);
+}
+
+.buttonBox:hover,
+.buttonBox:active {
+    color: var(--accent-literal);
+}
+
+/* Action tiles: "quad palette glass" - tinted glass fills with well-separated
+   hues (amber / emerald / royal blue / magenta), a layered halo on hover and a
+   pressed-in sink on mouse-down. --tile holds the hue as raw RGB channels. */
+.buttons-container .buttonBox:nth-child(1) .button {
+    --tile: 245, 158, 11;
+}
+
+.buttons-container .buttonBox:nth-child(2) .button {
+    --tile: 16, 185, 129;
+}
+
+.buttons-container .buttonBox:nth-child(3) .button {
+    --tile: 59, 130, 246;
+}
+
+.buttons-container .buttonBox:nth-child(4) .button {
+    --tile: 217, 70, 239;
+}
+
+/* !important beats the flat fills styles.css puts on .button-swap. */
+.buttons-container .button {
+    background: rgba(var(--tile), 0.14) !important;
+    border: 1px solid rgba(var(--tile), 0.6);
+    box-shadow: 0 0 14px -6px rgba(var(--tile), 0.55);
+    transition: transform 0.1s ease, box-shadow 0.18s ease,
+        background 0.18s ease, filter 0.1s ease;
+}
+
+.buttons-container .button img {
+    filter: brightness(0) invert(1);
+}
+
+/* Hover (or keyboard focus) anywhere on the tile (the click target is
+   .buttonBox): card-style two-layer halo lighting in the tile's own hue.
+   :focus-visible, not :focus, so a mouse click doesn't leave the halo
+   stuck on the tile after navigating back to this screen. */
+.buttons-container .buttonBox:hover .button,
+.buttons-container .buttonBox:focus-visible .button {
+    background: rgba(var(--tile), 0.22) !important;
+    box-shadow: 0 0 22px -4px rgba(var(--tile), 0.85),
+        0 0 48px -10px rgba(var(--tile), 0.6);
+    transform: none;
+}
+
+/* Mouse-down: tile sinks, fill deepens, halo pulls in. */
+.buttons-container .buttonBox:active .button {
+    transform: scale(0.9);
+    background: rgba(var(--tile), 0.38) !important;
+    box-shadow: 0 0 10px -2px rgba(var(--tile), 0.9),
+        inset 0 2px 6px rgba(0, 0, 0, 0.55);
+    filter: brightness(1.15);
+}
+
+.buttons-container .buttonBox:active {
+    color: #ffffff;
+}
+
+/* Token/Unrecognized tab buttons are bare <button>s; the UA default text
+   color is black. */
+#divTokenTabs button {
+    color: var(--text);
+    font-family: var(--body-font);
+}
+
+/* Long contract addresses under the token selector wrap inside the card. */
+#divCoinTokenToSend {
+    word-break: break-all;
+}
+
+/* ---------- Receive screen: keep the QR scannable on a white plate. */
+#qrcode {
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 12px;
+    display: inline-block;
+    line-height: 0;
+}
+
+/* ---------- Transactions toggles + pager ---------- */
+.top_toggle_btn {
+    color: var(--accent-soft);
+}
+
+.top_toggle_btn_line {
+    border-color: var(--accent-soft);
+}
+
+.top_toggle .disabled {
+    color: rgba(255, 255, 255, 0.45);
+    border-color: transparent;
+}
+
+.prev,
+.next {
+    color: var(--accent-soft);
+}
+
+.trans_row_container {
+    border-color: var(--border);
+}
+
+.row_header,
+.left_row_item {
+    color: var(--text);
+}
+
+.divider_vert_line {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* In/out + failed arrows in the tx tables are dark-plum ionicons; flip
+   lightness while keeping their green/red hues. */
+.styled-table td img {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+/* ---------- Settings menu ---------- */
+.vertical-menu {
+    box-shadow: none;
+    border: 1px solid var(--border);
+    background: var(--glass);
+}
+
+.vertical-menu a {
+    background-color: transparent;
+    color: var(--text);
+}
+
+.vertical-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.vertical-menu a.active {
+    background-color: rgba(108, 59, 255, 0.25);
+    color: #ffffff;
+}
+
+.vertical-menu-item {
+    background: transparent;
+    border-radius: 9px;
+}
+
+/* ---------- Restore-from-file button ---------- */
+.custom-file-input::before {
+    background: rgba(108, 59, 255, 0.16);
+    border: 1px solid rgba(108, 59, 255, 0.5);
+    color: #cdbcff;
+    text-shadow: none;
+    border-radius: 8px;
+}
+
+.custom-file-input:hover::before {
+    border-color: rgba(140, 100, 255, 0.9);
+    color: #ffffff;
+}
+
+.custom-file-input:active::before {
+    background: rgba(108, 59, 255, 0.3);
+}
+
+/* ---------- Seed screens ---------- */
+/* The A1/B1/... word labels inherit dark colors from .seedrowheadN and are
+   unreadable on the dark background; force them white. Box colors untouched. */
+.seedCell > div:first-child {
+    color: #ffffff;
+}
+
+/* ---------- Gas toast ---------- */
+.gas-toast {
+    background: var(--panel);
+    border: 1px solid rgba(140, 100, 255, 0.5);
+    box-shadow: var(--pop-shadow);
+}
+
+/* ---------- Autocomplete (token pickers) ---------- */
+.acd-choices {
+    background-color: var(--panel);
+    border: 1px solid rgb(143, 138, 170);
+    box-shadow: var(--pop-shadow);
+    color: var(--text);
+}
+
+.acd-choice.selected {
+    color: var(--accent-literal);
+    font-weight: bold;
+}
+
+.acd-choices::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+}
+
+.acd-choices::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.18);
+}

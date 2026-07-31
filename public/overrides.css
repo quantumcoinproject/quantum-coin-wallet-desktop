@@ -1,0 +1,555 @@
+/* Post-migration overrides layered on top of the verbatim legacy styles.css.
+
+   Seed-word legibility: seed words were rendered in Poppins, where uppercase
+   "I" and lowercase "l" are identical vertical bars. Use a system monospaced
+   stack in which I / l / 1 are visually distinct in both cases (Consolas has
+   a serifed I and a tailed l; Menlo likewise on macOS). Applies to the
+   new-seed and reveal-seed word grids, the seed entry boxes, and the seed
+   autocomplete dropdown. No font files are bundled for this. */
+
+.seedrow1, .seedrow2, .seedrow3, .seedrow4, .seedrow5, .seedrow6,
+.seedrow7, .seedrow8, .seedrow9, .seedrow10, .seedrow11, .seedrow12,
+.seedrowplain,
+.entrybox.edit-div,
+.acd-choice {
+    font-family: Consolas, Menlo, "DejaVu Sans Mono", "Liberation Mono", monospace;
+}
+
+/* De-inlined shared form-field styles (formerly repeated style="..."
+   attributes on the screen modules). input.<class> ties the specificity of
+   the quantum theme's input[type=...] rules; this sheet loads after the theme
+   sheets, so these declarations win the tie, matching the old inline-style
+   behavior (borderless underlined fields). The quantum theme recolors
+   .qs-input/.qs-input-strong text alongside its [style*="color:black"]
+   hooks. */
+input.qs-input,
+input.qs-input-strong {
+    text-align: left;
+    width: 100%;
+    border: none;
+    outline: none;
+    color: black;
+}
+
+input.qs-input {
+    font-weight: 400;
+}
+
+/* Send screen recipient field. It is a <textarea rows="2"> rather than an
+   <input> so a full 66-character address wraps into view instead of scrolling
+   its right half off the edge; these declarations reproduce the borderless
+   underlined look of input.qs-input above (that selector is element-qualified,
+   so it does not reach here). Font family/size still come from .tab-name on
+   the element itself, which beats the UA textarea default. */
+textarea.qs-input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    /* The UA default for <input>; repeated so this field's text lines up with
+       the quantity <input> below it. */
+    padding: 1px 2px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: black;
+    font-weight: 400;
+    text-align: left;
+    resize: none;
+    overflow: hidden;
+    word-break: break-all;
+}
+
+input.qs-input-strong {
+    font-weight: 500;
+    letter-spacing: 0.11em;
+}
+
+/* Password-visibility eye toggle next to password boxes. */
+img.qs-eye {
+    cursor: pointer;
+    width: 20px;
+}
+
+/* Standout warning strip shown just below the logo whenever a non-built-in
+   swap release is active (see updateCustomReleaseBanner in app/release.ts).
+   Kept thin (small font, minimal padding) so on the home screen it ends above
+   the address row of the wallet card that overlaps the header band. */
+.custom-release-banner {
+    width: 100%;
+    box-sizing: border-box;
+    background: #ff9800;
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-bottom: 1px solid #b26500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* The banner must paint above the wallet cards (.tabs-content /
+   .tabs-wallet-content, z-index 11), which deliberately overlap the band's
+   bottom edge. The quantum theme's .gradient { z-index: 10 } would create a
+   stacking context that traps the banner beneath the cards, so relax it to
+   auto: the band still paints above the ambient orbs (z 0, earlier in the
+   DOM) and still sits below the cards, but the banner's own z-index now wins. */
+.gradient {
+    z-index: auto;
+}
+
+/* Shared searchable token selector. */
+#modalTokenPicker {
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Trigger: this button stands in for the legacy <select id="ddlCoinTokenToSend">
+   (still in the DOM, hidden, as the value holder), so it copies .selectwrapper /
+   .selectbox - light grey field, black text, 5px radius, 90% width - and draws
+   its own caret since a button has no native one. Once a token is chosen,
+   applyTokenPickerSelection() writes the label here, so it reads as a selected
+   dropdown value. */
+.token-picker-trigger {
+    width: 90%;
+    box-sizing: border-box;
+    padding: 5px 28px 5px 5px;
+    border: 1px solid #e7e7e7;
+    border-radius: 5px;
+    background: #e7e7e7;
+    color: #000000;
+    font-family: inherit;
+    font-size: large;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    position: relative;
+}
+
+.token-picker-trigger::after {
+    content: "\25BE";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #000000;
+}
+
+/* Mirrors .selectbox:focus. */
+.token-picker-trigger:hover,
+.token-picker-trigger:focus-visible {
+    border-color: #000000;
+    border-style: outset;
+    outline: none;
+}
+
+/* Dialog: matches the app's other modals (.modal-content - #fefefe on a 1px
+   #888 border, 15px radius) rather than the dark violet panel the
+   quantumswapwallet build uses. */
+.modal-content.token-picker-dialog {
+    width: min(430px, calc(100vw - 40px));
+    max-width: 430px;
+    height: auto;
+    max-height: calc(100vh - 80px);
+    margin: 0;
+    box-sizing: border-box;
+    padding: 18px;
+    overflow: hidden;
+    border: 1px solid #888;
+    border-radius: 15px;
+    background: #fefefe;
+    color: #000000;
+    display: flex;
+    flex-direction: column;
+}
+
+.token-picker-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.token-picker-head h3 {
+    margin: 0;
+    color: #000000;
+}
+
+.token-picker-close {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: transparent;
+    color: #000000;
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.token-picker-search-wrap {
+    position: relative;
+    margin-top: 15px;
+}
+
+input.token-picker-search {
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+    padding: 8px 42px 8px 12px;
+    border: 1px solid #cfcfcf;
+    border-radius: 8px;
+    background: #e7e7e7;
+    color: #000000;
+}
+
+input.token-picker-search:focus {
+    border-color: #000000;
+    outline: none;
+}
+
+.token-picker-unrecognized-toggle {
+    align-items: center;
+    gap: 7px;
+    margin: 10px 2px 0;
+    color: #372339;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.token-picker-unrecognized-toggle input {
+    margin: 0;
+    accent-color: #5f00ff;
+}
+
+.token-picker-spinner {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 15px;
+    height: 15px;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    border-top-color: #5f00ff;
+    border-radius: 50%;
+    animation: token-picker-spin 0.8s linear infinite;
+}
+
+@keyframes token-picker-spin {
+    to { transform: rotate(360deg); }
+}
+
+.token-picker-status {
+    min-height: 18px;
+    margin: 7px 2px 3px;
+    color: #5c5c5c;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.token-picker-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-top: 1px solid #d9d9d9;
+}
+
+.token-picker-row {
+    display: flex;
+    width: 100%;
+    min-height: 67px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    box-sizing: border-box;
+    padding: 9px 8px;
+    border: 0;
+    border-bottom: 1px solid #ececec;
+    background: transparent;
+    color: #000000;
+    text-align: left;
+    cursor: pointer;
+}
+
+.token-picker-row:hover,
+.token-picker-row:focus-visible {
+    background: #efe9ff;
+    outline: 1px solid #b9a6ff;
+}
+
+/* The token currently held by the hidden <select>, so reopening the picker
+   shows which one is active - the same affordance a native dropdown gives. */
+.token-picker-row.selected {
+    background: #e4dbff;
+}
+
+.token-picker-row > span:first-child,
+.token-picker-symbol {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.token-picker-row > span:first-child {
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.token-picker-symbol {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.token-picker-marker {
+    color: #1DCC70;
+    font-size: 11px;
+}
+
+.token-picker-name,
+.token-picker-address {
+    max-width: 270px;
+    overflow: hidden;
+    color: #6b6b6b;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.token-picker-balance {
+    flex-shrink: 0;
+    max-width: 55%;
+    overflow: hidden;
+    color: #000000;
+    font-size: 13px;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.token-picker-badge {
+    padding: 1px 5px;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 500;
+}
+
+.token-picker-badge.default {
+    background: rgba(29, 204, 112, 0.18);
+    color: #12833f;
+}
+
+.token-picker-badge.imported {
+    background: rgba(95, 0, 255, 0.14);
+    color: #5f00ff;
+}
+
+.token-picker-badge.unrecognized {
+    background: rgba(255, 174, 66, 0.25);
+    color: #8a5000;
+}
+
+/* Release banner (when shown) takes its own full row below the logo row. */
+.gradient .custom-release-banner {
+    flex: 1 0 100%;
+    order: 1;
+    position: relative;
+    z-index: 12;
+}
+
+/* Numbered multi-step transaction dialog (modalTxSteps, see app/txsteps.ts).
+   Ported from the web app's txSteps styles, adapted to the light modal. */
+.tx-step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 12px 0 0 0;
+    padding: 0;
+    list-style: none;
+    min-height: 44px;
+}
+
+.tx-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid transparent;
+    font-size: 14px;
+    color: #ffffff;
+    text-align: left;
+}
+
+.tx-step .tx-badge {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+
+.tx-step .tx-label {
+    flex: 1;
+    word-break: break-word;
+    color: #ffffff;
+}
+
+.tx-step .tx-substatus {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 12px;
+}
+
+.tx-step.s-active,
+.tx-step.s-confirming {
+    background: rgba(114, 78, 219, 0.22);
+    border-color: rgba(114, 78, 219, 0.55);
+    color: #ffffff;
+}
+
+.tx-step.s-active .tx-badge,
+.tx-step.s-confirming .tx-badge {
+    background: rgba(114, 78, 219, 0.45);
+    color: #ffffff;
+}
+
+.tx-step.s-ready {
+    background: rgba(13, 148, 136, 0.28);
+    border-color: rgba(45, 212, 191, 0.72);
+    color: #ffffff;
+}
+
+.tx-step.s-ready .tx-badge {
+    background: rgba(13, 148, 136, 0.65);
+    color: #ffffff;
+}
+
+.tx-step.s-done {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.tx-step.s-done .tx-label {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.tx-step.s-done .tx-badge {
+    background: rgba(22, 163, 74, 0.18);
+    color: #16a34a;
+}
+
+.tx-step.s-failed .tx-badge {
+    background: rgba(220, 38, 38, 0.18);
+    color: #dc2626;
+}
+
+.tx-step.s-failed .tx-label {
+    color: #dc2626;
+}
+
+.tx-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-top-color: #c4b5fd;
+    animation: qs-tx-spin 0.9s linear infinite;
+    pointer-events: none;
+    vertical-align: middle;
+}
+
+@keyframes qs-tx-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.tx-steps-error {
+    color: #dc2626;
+    text-align: left;
+}
+
+/* The legacy .proceed rule floats buttons upward with a negative margin.
+   Keep the tx-steps footer in normal flow so it cannot overlap step rows. */
+#modalTxSteps .proceed {
+    float: none;
+    margin-top: 0;
+    flex-direction: row;
+}
+
+/* Offline-bundle dialog: same problem. The legacy float / negative margin
+   would pull the footer Copy / Close buttons up over the content above;
+   keep them in normal flow. */
+#modalOfflineBundle .proceed,
+#modalOfflineBundle .cancel {
+    float: none;
+    margin-top: 0;
+    margin-left: 0;
+    flex-direction: row;
+}
+
+/* Match the web-app swap-direction control. The negative bottom margin only
+   swallows dead space below the button (the "To token" heading's 3px top
+   margin plus its line-box leading), so the visual gap above the button
+   (to the from-quantity input's edge) and below it (to the "To token"
+   glyphs) come out the same. */
+.swap-flip {
+    display: flex;
+    justify-content: center;
+    margin: 4px 0 -8px;
+    position: relative;
+    z-index: 2;
+}
+
+.swap-flip button {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    background: rgb(28 31 47);
+    border: 1px solid rgb(145 125 207 / 60%);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 16px -4px rgba(108, 59, 255, 0.7);
+    transition: background 0.15s ease, border-color 0.15s ease, filter 0.15s ease, transform 0.08s ease;
+}
+
+.swap-flip button:hover:not(:disabled) {
+    background: rgb(42, 46, 70);
+    border-color: rgb(165, 148, 220);
+}
+
+.swap-flip button:active:not(:disabled) {
+    transform: scale(0.96);
+    filter: brightness(0.88);
+}
+
+.swap-flip button:disabled {
+    cursor: default;
+    opacity: 0.45;
+}

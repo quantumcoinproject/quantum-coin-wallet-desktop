@@ -92,5 +92,9 @@ out/
 dist/
 .vs/
 
+# Playwright run output (traces, failure screenshots, HTML report). Committed
+# visual baselines live in e2e/*-snapshots/ and are deliberately not ignored.
+test-results/
+playwright-report/
+
 src/test.html
-scripts/
